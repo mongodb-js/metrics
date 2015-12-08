@@ -15,12 +15,12 @@ should be sent for the event.
 
 ## All Events
 
-Send the following meta-data with every event:
+Send the following meta-data with every event if supported:
 
 - `user_id` {String}       (created at first `app_launch` event)
 - `session_id` {String}    (created at every `app_launch` event)
 
-## General Events
+## General Resources
 
 ### `App` Resource
 
@@ -66,9 +66,20 @@ Google Analytics
 
 ### `User` Resource
 
-#### `created` Action
+#### Properties
 
-#### `loggedin` Action
+- `userId` {String}
+
+
+#### Actions
+
+##### `created` Action
+
+##### `loggedin` Action
+
+
+
+
 
 ### `Error` Resource
 

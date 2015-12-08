@@ -127,12 +127,12 @@ var Metrics = State.extend({
   },
   /**
    * Call this from your app when you want to track an event.
-   * @param  {String} resourceName    the resource, e.g. `Collection`
+   * @param  {String} resourceId      the resource, e.g. `Collection`
    * @param  {String} action          the action, e.g. `sampled`
    * @param  {Object} metadata        metadata associated with that event
    */
-  track: function(resourceName, action, metadata) {
-    var resource = this.resources.get(resourceName);
+  track: function(resourceId, action, metadata) {
+    var resource = this.resources.get(resourceId);
     resource[action](metadata);
   }  
 });
