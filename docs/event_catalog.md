@@ -7,10 +7,11 @@ An event consists of
 3. metadata
 
 These attributes form a transparent abstraction and map differently to
-trackers like Intercom or Google Analytics.
+trackers like Intercom, Google Analytics or Bugsnag.
 
-This document lists useful events for Compass, grouped by their resources
-and actions, and specifies the metadata that should be sent for the event.
+This document lists useful generic events and specific ones just for Compass,
+grouped by their resource and action, and specifies the metadata that ideally
+should be sent for the event.
 
 ## All Events
 
@@ -18,36 +19,56 @@ Send the following meta-data with every event:
 
 - `user_id` {String}       (created at first `app_launch` event)
 - `session_id` {String}    (created at every `app_launch` event)
-- `date` {Timestamp}
 
 ## General Events
 
 ### `App` Resource
 
-#### `launch` Action
-- `app_version` {String}
-- `app_platform` {String}
-- `os_version` {String}
+#### Properties
+- `appName` {String} e.g. `"MongoDB Compass"`
+- `appVersion` {String} e.g. `"1.0.0"`
+- `os` {String} e.g. `"OS X 10.11 (El Capitan)"`
 
-#### `quit` Action
-- `normal` {Boolean}
+#### Actions
 
-#### `upgrade` Action
-- `last_known_version` {String}
-- `current_version` {String}
+##### `launched()`
+Google Analytics
+: sends an `event` hit with
+  - `eventCategory` (`"App"`)
+  - `eventAction` (`"launched"`)
+  - `eventLabel` (`"MongoDB Compass 1.0.0"`)
 
-#### `downgrade` Action
-- `last_known_version` {String}
-- `current_version` {String}
+##### `quit(normal)`
+Google Analytics
+: sends an `event` hit with
+  - `eventCategory` (`"App"`)
+  - `eventAction` (`"quit"`)
+  - `eventLabel` (`"MongoDB Compass 1.0.0"`)
+  - `eventValue` (`0` for normal, else `1`)
 
-#### `pageload` Action
-- `url` {String}
+##### `upgraded(previousVersion)`
+Google Analytics
+: sends an `event` hit
+
+- `eventCategory` (`"App"`)
+- `eventAction` (`"upgraded"`)
+- `eventLabel` (`"MongoDB Compass 1.0.0 -> 1.0.3"`)
+
+##### `viewed(screenName)`
+
+Google Analytics
+: sends a `screenview` hit with
+- `appName` (`"MongoDB Compass"`)
+- `appId` (`"com.mongodb.compass"`)
+- `appVersion` (`"1.0.0"`)
+- `screenName` (`"Preferences"`)
+
 
 ### `User` Resource
 
 #### `created` Action
 
-#### `login` Action
+#### `loggedin` Action
 
 ### `Error` Resource
 
@@ -135,11 +156,13 @@ Send the following meta-data with every event:
 #### `schema` Action
 - `size` {Number}
 
+
 ### `Documents` Resource
 
 #### `opened` Action
 
 #### `closed` Action
+
 
 ### `Tour` Resource
 
@@ -154,6 +177,7 @@ Send the following meta-data with every event:
 - `first_run` {Boolean}
 
 #### `closed` Action
+
 
 ### `Feedback` Resource
 
