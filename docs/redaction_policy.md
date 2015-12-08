@@ -1,11 +1,14 @@
 # Redaction Policy
 
-## Don't
+## Don't Send
 
 Be careful with any strings. If something ends in `name`, it should probably not be sent, including
 
 - user names (both OS and MongoDB authentication)
+- company names
+- project names
 - host names
+- computer names
 - cluster names
 - replica set names
 - database names
