@@ -14,7 +14,6 @@ Errors and unhandled Exceptions should send `exception` hits.
 
 Performance measurements like schema sampling should use `timing` hits.
 
-
 ## Screen Views
 
 See [App/Screen Views][ga-screenviews] docs.
@@ -74,6 +73,19 @@ There are several ways of submitting additional (meta) information.
 we could encode information as Label/Value pairs and send with the event. The values are limited to numeric types.
 we could use custom metrics/dimensions and send with the event. metrics and dimensions are limited to 20 distinct values each.
 
+## Additional parameters
+
+For additional variables that can be sent, see the [Measurement Protocol][ga-measurement-protocol];
+
+Here some of the relevant ones:
+
+- `ds` Data Source, set to `app`
+- `cid` Client ID, set to the user uuid
+- `sc` Session Control, set to `start` when session start and `"end"` when it ends.
+- `sr` Screen Resolution, e.g. `800x600`
+- `vp` Viewport Size, e.g. `123x456` (use the window size here)
+
+
 
 
 [ga-hittypes]: https://developers.google.com/analytics/devguides/collection/analyticsjs/sending-hits
@@ -81,3 +93,4 @@ we could use custom metrics/dimensions and send with the event. metrics and dime
 [ga-exceptions]: https://developers.google.com/analytics/devguides/collection/analyticsjs/exceptions
 [ga-events]: https://developers.google.com/analytics/devguides/collection/analyticsjs/events
 [ga-timings]: https://developers.google.com/analytics/devguides/collection/analyticsjs/user-timings
+[ga-measurement-protocol]: https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters
