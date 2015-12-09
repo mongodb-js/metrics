@@ -5,7 +5,7 @@ var pkg = require('../package.json');
 var process = require('process');
 var format = require('util').format;
 
-var debug = require('debug')('metrics:test:user');
+// var debug = require('debug')('metrics:test:user');
 var DEBUG = true;
 
 describe('App Resource', function() {
@@ -32,19 +32,6 @@ describe('App Resource', function() {
 
   it('should have `App` as its id', function() {
     assert.equal(app.id, 'App');
-  });
-
-  it('should complain if a new App resource does not contain a name or version', function() {
-    /* eslint no-unused-vars: 0 */
-    assert.throws(function() {
-      var badApp = new resources.AppResource({appName: 'Foo'});
-    }, /required/);
-
-    assert.throws(function() {
-      var badApp = new resources.AppResource({appVersion: '1.0'});
-    }, /required/);
-
-    assert.ok(new resources.AppResource({appName: 'Foo', appVersion: '1.0'}));
   });
 
   it('should have appName, appVersion, appInstallerId after adding the app resource', function() {

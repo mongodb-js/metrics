@@ -29,15 +29,6 @@ describe('User Resource', function() {
     assert.equal(user.id, 'User');
   });
 
-  it('should complain if a new User resource does not contain a name or version', function() {
-    /* eslint no-unused-vars: 0 */
-    assert.throws(function() {
-      var badUser = new resources.UserResource();
-    }, /required/);
-
-    assert.ok(new resources.UserResource({clientId: '123'}));
-  });
-
   it('should have a clientId after adding the user resource', function() {
     metrics.addResource(user);
     assert.equal(metrics.trackers.get('ga').clientId, '121d91ad-15a4-47eb-977d-f279492932f0');

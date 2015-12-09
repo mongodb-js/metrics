@@ -93,7 +93,7 @@ metrics.configure('bugsnag', {
 ```
 
 You can also configure all the trackers at once, by passing in a single object
-to the `configure(options)` method. They keys have to match the tracker names:
+to the `configure(options)` method. The keys have to match the tracker names:
 
 ```js
 metrics.configure({
@@ -167,7 +167,7 @@ Those resources and their actions are:
 
 You can also build custom Resources that are specific to your app and use
 them as you would use the built-in ones. Make them extend the `BaseResource`
-and follow its interface. For am example, look at the built-in resources
+and follow its interface. For an example, look at the built-in resources
 under `./lib/resources/` to see how they are implemented.
 
 ## License
