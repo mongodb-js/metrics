@@ -75,7 +75,7 @@ Google Analytics
 
 ##### `created` Action
 
-##### `loggedin` Action
+##### `logged_in` Action
 
 
 
