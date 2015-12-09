@@ -40,14 +40,14 @@ describe('User Resource', function() {
 
   it('should have a clientId after adding the user resource', function() {
     metrics.addResource(user);
-    assert.equal(metrics.googleAnalytics.clientId, '121d91ad-15a4-47eb-977d-f279492932f0');
+    assert.equal(metrics.trackers.get('ga').clientId, '121d91ad-15a4-47eb-977d-f279492932f0');
   });
 
   it('should update the clientId when it changes on the user resource', function() {
     metrics.addResource(user);
-    assert.equal(metrics.googleAnalytics.clientId, '121d91ad-15a4-47eb-977d-f279492932f0');
+    assert.equal(metrics.trackers.get('ga').clientId, '121d91ad-15a4-47eb-977d-f279492932f0');
     user.clientId = '3c007a83-e8c3-4b52-9631-b5fd97950dce';
-    assert.equal(metrics.googleAnalytics.clientId, '3c007a83-e8c3-4b52-9631-b5fd97950dce');
+    assert.equal(metrics.trackers.get('ga').clientId, '3c007a83-e8c3-4b52-9631-b5fd97950dce');
   });
 
   it('should attach the right protocol parameters for a logged_in event', function(done) {
