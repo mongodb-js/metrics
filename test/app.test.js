@@ -49,20 +49,20 @@ describe('App Resource', function() {
 
   it('should have appName, appVersion, appInstallerId after adding the app resource', function() {
     metrics.addResource(app);
-    assert.equal(metrics.googleAnalytics.appName, pkg.name);
-    assert.equal(metrics.googleAnalytics.appVersion, pkg.version);
-    assert.equal(metrics.googleAnalytics.appInstallerId, process.platform);
+    assert.equal(metrics.trackers.get('ga').appName, pkg.name);
+    assert.equal(metrics.trackers.get('ga').appVersion, pkg.version);
+    assert.equal(metrics.trackers.get('ga').appInstallerId, process.platform);
   });
 
   it('should update the parameters when they change on the app resource', function() {
     metrics.addResource(app);
-    assert.equal(metrics.googleAnalytics.appName, pkg.name);
+    assert.equal(metrics.trackers.get('ga').appName, pkg.name);
     app.appName = 'AngryWolvesWithTinyWings';
-    assert.equal(metrics.googleAnalytics.appName, 'AngryWolvesWithTinyWings');
+    assert.equal(metrics.trackers.get('ga').appName, 'AngryWolvesWithTinyWings');
     app.appVersion = '0.0.1';
-    assert.equal(metrics.googleAnalytics.appVersion, '0.0.1');
+    assert.equal(metrics.trackers.get('ga').appVersion, '0.0.1');
     app.appInstallerId = 'Mac OS X';
-    assert.equal(metrics.googleAnalytics.appInstallerId, 'Mac OS X');
+    assert.equal(metrics.trackers.get('ga').appInstallerId, 'Mac OS X');
   });
 
   it('should attach the right protocol parameters for a viewed screenview', function(done) {
