@@ -54,7 +54,7 @@ user.login();
 ```
 
 Because `metrics` is a singleton, you don't have to worry about passing it
-(or the resources) around or poluting your global context. Once the Resources
+(or the resources) around or polluting your global context. Once the Resources
 are added in your app setup code, you can always just access another reference:
 
 ```js
@@ -71,7 +71,14 @@ reference to the existing singleton object.
 ```js
 // note the () at the end, to instantiate the singleton
 var metrics = require('mongodb-js-metrics')();
+```
 
+### Configuration
+
+You can configure individual trackers with the `.configure(name, options)`
+syntax.
+
+```js
 // configure google analytics
 metrics.configure('ga', {
   trackingId: 'UA-########-#'
@@ -86,7 +93,7 @@ metrics.configure('bugsnag', {
 ```
 
 You can also configure all the trackers at once, by passing in a single object
-to the `configure()` method:
+to the `configure(options)` method. They keys have to match the tracker names:
 
 ```js
 metrics.configure({
@@ -99,7 +106,19 @@ metrics.configure({
 });
 ```
 
-You need to add resources before you can track events. The _App_ and _User_
+
+### Resources
+
+Everything you want to track is organized into _resources_ and their _actions_.
+Each resource/action pair can be reported differently to one or more trackers.
+
+For example, if you want to track application launches, you would create an
+`App` resource with a `launched` action. If you want to track different types
+of errors, you could create an `Error` resource and give it different actions,
+like `warning`, `exception`, `fatal`.
+
+
+You need to add resources before you can track anything. The _App_ and _User_
 resources are almost always required. Once they are added (see Quick Start for
 an example), you can use the `.track()` helper to conveniently track events.
 
@@ -122,15 +141,7 @@ metrics.track('Error', 'fatal', new Error('this is really bad!'), function(err, 
 
 ```
 
-## Resources
-
-Everything you want to track is organized into _resources_ and their _actions_.
-Each resource/action pair can be reported differently to one or more trackers.
-
-For example, if you want to track application launches, you would create an
-`App` resource with a `launched` action. If you want to track different types
-of errors, you could create an `Error` resource and give it different actions,
-like `warning`, `exception`, `fatal`.
+### Built-in Resources
 
 mongodb-js-metrics comes with some commonly used built-in resources already.
 Those resources and their actions are:
@@ -151,11 +162,13 @@ Those resources and their actions are:
   - `exception(err)`
   - `fatal(err)`
 
+
+### Custom Resources
+
 You can also build custom Resources that are specific to your app and use
 them as you would use the built-in ones. Make them extend the `BaseResource`
 and follow its interface. For am example, look at the built-in resources
 under `./lib/resources/` to see how they are implemented.
-
 
 ## License
 
