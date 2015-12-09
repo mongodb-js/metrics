@@ -5,15 +5,15 @@ var pkg = require('../package.json');
 
 var debug = require('debug')('metrics:test:metrics');
 
-var DEBUG = false;
+var DEBUG = true;
 
 describe('metrics', function() {
   this.slow(1000);
   this.timeout(5000);
 
   var metrics;
-  var App;
-  var User;
+  var app;
+  var user;
   beforeEach(function() {
     // create metrics object and initialize
     metrics = new Metrics({
@@ -24,21 +24,21 @@ describe('metrics', function() {
     });
 
     // create a new app resource
-    App = new resources.AppResource({
+    app = new resources.AppResource({
       appName: pkg.name,
       appVersion: pkg.version
     });
 
     // create a new user resource
-    User = new resources.UserResource({
-      userId: '121d91ad-15a4-47eb-977d-f279492932f0'
+    user = new resources.UserResource({
+      clientId: '121d91ad-15a4-47eb-977d-f279492932f0'
     });
   });
 
   it('should send a google analytics App:launched event hit', function(done) {
     // add resources to tracker
-    metrics.addResource(App);
-    metrics.addResource(User);
+    metrics.addResource(app);
+    metrics.addResource(user);
 
     // send App/launched event
     metrics.track('App', 'launched', function(err, resp, body) {
@@ -56,8 +56,8 @@ describe('metrics', function() {
 
   it('should send a google analytics User:logged_in event hit', function(done) {
     // add resources to tracker
-    metrics.addResource(App);
-    metrics.addResource(User);
+    metrics.addResource(app);
+    metrics.addResource(user);
 
     metrics.track('User', 'logged_in', function(err, resp, body) {
       if (err) {
@@ -73,8 +73,8 @@ describe('metrics', function() {
 
   it('should send a google analytics App:viewed screenview hit', function(done) {
     // add resource to tracker
-    metrics.addResource(App);
-    metrics.addResource(User);
+    metrics.addResource(app);
+    metrics.addResource(user);
 
     // send App/launched event
     metrics.track('App', 'viewed', 'Test Results', function(err, resp, body) {
