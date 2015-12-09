@@ -9,7 +9,7 @@ var mockTracker = function(callback) {
 };
 
 
-describe('Resources', function() {
+describe.skip('Resources', function() {
   describe('Base', function() {
     var base;
     beforeEach(function() {
