@@ -1,4 +1,4 @@
-var Metrics = require('../lib');
+var metrics = require('../lib')();
 var resources = require('../lib/resources');
 var assert = require('assert');
 
@@ -6,17 +6,18 @@ var debug = require('debug')('metrics:test:user');
 var DEBUG = true;
 
 describe('User Resource', function() {
-  var metrics;
   var user;
 
   beforeEach(function() {
     // create metrics object and initialize
-    metrics = new Metrics({
+    metrics.configure({
       gaOptions: {
         debug: DEBUG,
         trackingId: 'UA-71150609-2'
       }
     });
+
+    metrics.resources.reset();
 
     // create a new user resource
     user = new resources.UserResource({

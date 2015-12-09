@@ -1,4 +1,4 @@
-var Metrics = require('../lib');
+var metrics = require('../lib')();
 var resources = require('../lib/resources');
 var assert = require('assert');
 var pkg = require('../package.json');
@@ -11,12 +11,12 @@ describe('metrics', function() {
   this.slow(1000);
   this.timeout(5000);
 
-  var metrics;
   var app;
   var user;
+
   beforeEach(function() {
     // create metrics object and initialize
-    metrics = new Metrics({
+    metrics.configure({
       gaOptions: {
         debug: DEBUG,
         trackingId: 'UA-71150609-2'
@@ -33,6 +33,16 @@ describe('metrics', function() {
     user = new resources.UserResource({
       clientId: '121d91ad-15a4-47eb-977d-f279492932f0'
     });
+  });
+
+  it('should be a singleton and remember its state across requires', function() {
+    metrics.addResource(app);
+    assert.ok(metrics.googleAnalytics.appName);
+
+    var MetricsSingleton = require('../lib');
+    var otherMetrics = new MetricsSingleton();
+    assert.equal(metrics.googleAnalytics, otherMetrics.googleAnalytics);
+    assert.equal(metrics.googleAnalytics.appName, otherMetrics.googleAnalytics.appName);
   });
 
   it('should send a google analytics App:launched event hit', function(done) {
