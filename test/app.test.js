@@ -48,8 +48,8 @@ describe('App Resource', function() {
     assert.equal(metrics.trackers.get('ga').appName, 'AngryWolvesWithTinyWings');
     app.appVersion = '0.0.1';
     assert.equal(metrics.trackers.get('ga').appVersion, '0.0.1');
-    app.appPlatform = 'Mac OS X';
-    assert.equal(metrics.trackers.get('ga').appPlatform, 'Mac OS X');
+    app.appPlatform = 'darwin';
+    assert.equal(metrics.trackers.get('ga').appPlatform, 'darwin');
   });
 
   it('should attach the right protocol parameters for a viewed screenview', function(done) {
@@ -82,10 +82,10 @@ describe('App Resource', function() {
       assert.equal(options.eventCategory, 'App');
       assert.equal(options.eventAction, 'quit');
       assert.equal(options.eventLabel, format('%s %s', pkg.name, pkg.version));
-      assert.equal(options.eventValue, 15);
+      assert.equal(options.eventValue, 0); // minutes since start
       done();
     };
-    app.quit(15);
+    app.quit();
   });
 
   it('should attach the right protocol parameters for an upgraded event', function(done) {
