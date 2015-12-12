@@ -26,7 +26,7 @@ describe('App Resource', function() {
     app = new resources.AppResource({
       appName: pkg.name,
       appVersion: pkg.version,
-      appInstallerId: process.platform
+      appPlatform: process.platform
     });
   });
 
@@ -34,11 +34,11 @@ describe('App Resource', function() {
     assert.equal(app.id, 'App');
   });
 
-  it('should have appName, appVersion, appInstallerId after adding the app resource', function() {
+  it('should have appName, appVersion, appPlatform after adding the app resource', function() {
     metrics.addResource(app);
     assert.equal(metrics.trackers.get('ga').appName, pkg.name);
     assert.equal(metrics.trackers.get('ga').appVersion, pkg.version);
-    assert.equal(metrics.trackers.get('ga').appInstallerId, process.platform);
+    assert.equal(metrics.trackers.get('ga').appPlatform, process.platform);
   });
 
   it('should update the parameters when they change on the app resource', function() {
@@ -48,8 +48,8 @@ describe('App Resource', function() {
     assert.equal(metrics.trackers.get('ga').appName, 'AngryWolvesWithTinyWings');
     app.appVersion = '0.0.1';
     assert.equal(metrics.trackers.get('ga').appVersion, '0.0.1');
-    app.appInstallerId = 'Mac OS X';
-    assert.equal(metrics.trackers.get('ga').appInstallerId, 'Mac OS X');
+    app.appPlatform = 'Mac OS X';
+    assert.equal(metrics.trackers.get('ga').appPlatform, 'Mac OS X');
   });
 
   it('should attach the right protocol parameters for a viewed screenview', function(done) {
