@@ -3,7 +3,7 @@ var resources = require('../lib/resources');
 var assert = require('assert');
 var pkg = require('../package.json');
 
-var debug = require('debug')('metrics:test:metrics');
+var debug = require('debug')('mongodb-js-metrics:test:metrics');
 
 var DEBUG = true;
 
@@ -96,12 +96,12 @@ describe('metrics', function() {
       });
     });
 
-    it('should send a google analytics User:logged_in event hit', function(done) {
+    it('should send a google analytics User:login event hit', function(done) {
       // add resources to tracker
       metrics.addResource(app);
       metrics.addResource(user);
 
-      metrics.track('User', 'logged_in', function(err, resp, body) {
+      metrics.track('User', 'login', function(err, resp, body) {
         if (err) {
           done(err);
         }

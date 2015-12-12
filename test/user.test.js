@@ -2,7 +2,7 @@ var metrics = require('../lib')();
 var resources = require('../lib/resources');
 var assert = require('assert');
 
-var debug = require('debug')('metrics:test:user');
+var debug = require('debug')('mongodb-js-metrics:test:user');
 var DEBUG = true;
 
 describe('User Resource', function() {
@@ -41,16 +41,16 @@ describe('User Resource', function() {
     assert.equal(metrics.trackers.get('ga').clientId, '3c007a83-e8c3-4b52-9631-b5fd97950dce');
   });
 
-  it('should attach the right protocol parameters for a logged_in event', function(done) {
+  it('should attach the right protocol parameters for a login event', function(done) {
     // mock function to intercept options
     user._send_ga = function(options) {
       debug('_send_ga options', options);
       assert.equal(options.hitType, 'event');
       assert.equal(options.eventLabel, user.clientId);
       assert.equal(options.eventCategory, 'User');
-      assert.equal(options.eventAction, 'logged_in');
+      assert.equal(options.eventAction, 'login');
       done();
     };
-    user.logged_in();
+    user.login();
   });
 });

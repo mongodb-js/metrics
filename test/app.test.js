@@ -5,7 +5,7 @@ var pkg = require('../package.json');
 var process = require('process');
 var format = require('util').format;
 
-// var debug = require('debug')('metrics:test:user');
+// var debug = require('debug')('mongodb-js-metrics:test:user');
 var DEBUG = true;
 
 describe('App Resource', function() {
