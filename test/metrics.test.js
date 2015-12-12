@@ -20,7 +20,7 @@ describe('metrics', function() {
 
     // create a new user resource
     user = new resources.UserResource({
-      clientId: '121d91ad-15a4-47eb-977d-f279492932f0'
+      userId: '121d91ad-15a4-47eb-977d-f279492932f0'
     });
   });
 

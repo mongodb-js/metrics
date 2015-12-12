@@ -21,7 +21,7 @@ describe('User Resource', function() {
 
     // create a new user resource
     user = new resources.UserResource({
-      clientId: '121d91ad-15a4-47eb-977d-f279492932f0'
+      userId: '121d91ad-15a4-47eb-977d-f279492932f0'
     });
   });
 
@@ -29,16 +29,16 @@ describe('User Resource', function() {
     assert.equal(user.id, 'User');
   });
 
-  it('should have a clientId after adding the user resource', function() {
+  it('should have a userId after adding the user resource', function() {
     metrics.addResource(user);
-    assert.equal(metrics.trackers.get('ga').clientId, '121d91ad-15a4-47eb-977d-f279492932f0');
+    assert.equal(metrics.trackers.get('ga').userId, '121d91ad-15a4-47eb-977d-f279492932f0');
   });
 
-  it('should update the clientId when it changes on the user resource', function() {
+  it('should update the userId when it changes on the user resource', function() {
     metrics.addResource(user);
-    assert.equal(metrics.trackers.get('ga').clientId, '121d91ad-15a4-47eb-977d-f279492932f0');
-    user.clientId = '3c007a83-e8c3-4b52-9631-b5fd97950dce';
-    assert.equal(metrics.trackers.get('ga').clientId, '3c007a83-e8c3-4b52-9631-b5fd97950dce');
+    assert.equal(metrics.trackers.get('ga').userId, '121d91ad-15a4-47eb-977d-f279492932f0');
+    user.userId = '3c007a83-e8c3-4b52-9631-b5fd97950dce';
+    assert.equal(metrics.trackers.get('ga').userId, '3c007a83-e8c3-4b52-9631-b5fd97950dce');
   });
 
   it('should attach the right protocol parameters for a login event', function(done) {
@@ -46,7 +46,7 @@ describe('User Resource', function() {
     user._send_ga = function(options) {
       debug('_send_ga options', options);
       assert.equal(options.hitType, 'event');
-      assert.equal(options.eventLabel, user.clientId);
+      assert.equal(options.eventLabel, user.userId);
       assert.equal(options.eventCategory, 'User');
       assert.equal(options.eventAction, 'login');
       done();
