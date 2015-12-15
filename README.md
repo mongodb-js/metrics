@@ -43,6 +43,9 @@ The call to `metrics.track()` is just a convenience wrapper. You could also just
 ```js
 // assumes you have a reference to the `user` resource above
 user.login();
+
+// identical to...
+metrics.track('User', 'login');
 ```
 
 Because `metrics` is a singleton, you don't have to worry about passing it (or the resources) around or polluting your global context. Once the Resources are added in your app setup code, you can always just access another reference:
@@ -61,7 +64,15 @@ The metrics module is a singleton. Any new instantiation will return a reference
 var metrics = require('mongodb-js-metrics')();
 ```
 
-### Configuration
+The `metrics` object holds references to trackers and resources, and makes the trackers available to the resources. It also contains convenient helper methods to  make tracking very easy.
+
+### Trackers
+The current version supports 3 trackers:
+- Google Analytics (screen views, events, exceptions, timings)
+- Intercom (events, in-app communication)
+- Bugsnag (errors)
+
+#### Configuration
 You can configure individual trackers with the `.configure(name, options)` syntax.
 
 ```js
@@ -75,10 +86,13 @@ metrics.configure('bugsnag', {
   apiKey: '################################'      
 });
 
-// @todo configure intercom
+// configure Intercom
+metrics.configure('intercom', {
+  appId: '########'
+});
 ```
 
-You can also configure all the trackers at once, by passing in a single object to the `configure(options)` method. The keys have to match the tracker names:
+You can also configure multiple trackers at once, by passing in a single object to the `configure(options)` method. The keys have to match the tracker names:
 
 ```js
 metrics.configure({
@@ -91,18 +105,21 @@ metrics.configure({
 });
 ```
 
+Configuring a tracker automatically enables it. This behavior can be disabled by explicitly passing in `{enabled: false}` into the options for the tracker.
+
 ### Resources
 Everything you want to track is organized into _resources_ and their _actions_. Each resource/action pair can be reported differently to one or more trackers.
 
-For example, if you want to track application launches, you would create an `App` resource with a `launched` action. If you want to track different types of errors, you could create an `Error` resource and give it different actions, like `warning`, `exception`, `fatal`.
+For example, if you want to track application launches, you would create an _App_ resource with a `launched` action. If you want to track different types of errors, you could create an `Error` resource and give it different actions, like `info`, `warning`, `error`.
+
+Resources have access to the trackers, and by default assign their properties to all trackers that require the properties. For example, the _App_ resource has  a property called `appName`. When the resource is added to metrics, it automatically pushes the `appName` value to all trackers that define it as one of their properties.
 
 You need to add resources before you can track anything. The _App_ and _User_ resources are almost always required. Once they are added (see Quick Start for an example), you can use the `.track()` helper to conveniently track events.
 
-The first argument to `track()` is the name of the resource (as a convention, the built-in resources all have uppercase names). The second argument is the name of the action you want to call. Subsequent arguments are passed to the action method, including a potential `callback` parameter at the end.
+The first argument to `track()` is the name of the resource (as a convention, all resources have uppercase names, and all actions have lowercase names). The second argument is the name of the action you want to call. Subsequent arguments are passed to the action method, including a potential `callback` parameter at the end.
 
 ```js
-
-metrics.track('Error', 'fatal', new Error('this is really bad!'), function(err, resp) {
+metrics.track('Error', 'warning', new Error('this is probably bad!'), function(err, resp) {
   if (err) {
     // warn and silently ignore if the error couldn't be tracked
     console.warn('could not track error, because: ', err);
@@ -127,9 +144,27 @@ mongodb-js-metrics comes with some commonly used built-in resources already. Tho
   - `logout()`
 
 - Error
+  - `info(err)`
   - `warning(err)`
-  - `exception(err)`
-  - `fatal(err)`
+  - `error(err)`
+
+- Feature (derive from this for each feature you use)
+  - `used(metadata)`
+
+Example how to track the usage of a plasma cannon and what strength was used:
+
+```js
+var FeatureResource = require('mongodb-js-metrics').resources.FeatureResource;
+var metrics = require('mongodb-js-metrics')();
+
+var PlasmaCannon = FeatureResource.extend({
+  id: 'Plasma Cannon'
+});
+
+metrics.track('Plasma Cannon', 'used', {
+  strength: 19
+});
+```
 
 ### Custom Resources
 You can also build custom Resources that are specific to your app and use them as you would use the built-in ones. Make them extend the `BaseResource` and follow its interface. For an example, look at the built-in resources under `./lib/resources/` to see how they are implemented.
