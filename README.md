@@ -161,6 +161,8 @@ var PlasmaCannon = FeatureResource.extend({
   id: 'Plasma Cannon'
 });
 
+metrics.addResource(new PlasmaCannon());
+
 metrics.track('Plasma Cannon', 'used', {
   strength: 19
 });
