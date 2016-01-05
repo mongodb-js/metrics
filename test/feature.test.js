@@ -2,7 +2,7 @@ var metrics = require('../lib')();
 var resources = require('../lib/resources');
 var assert = require('assert');
 
-var debug = require('debug')('mongodb-js-metrics:test:user');
+// var debug = require('debug')('mongodb-js-metrics:test:feature');
 var DEBUG = true;
 
 describe('Feature Resource', function() {
@@ -12,7 +12,7 @@ describe('Feature Resource', function() {
   beforeEach(function() {
     // create metrics object and initialize
     metrics.configure({
-      gaOptions: {
+      'ga': {
         debug: DEBUG,
         trackingId: 'UA-71150609-2'
       }
@@ -35,7 +35,6 @@ describe('Feature Resource', function() {
   it('should attach the right protocol parameters for a `used` event', function(done) {
     // mock function to intercept options
     feature._send_ga = function(options) {
-      debug('_send_ga options', options);
       assert.equal(options.hitType, 'event');
       assert.equal(options.eventLabel, undefined);
       assert.equal(options.eventValue, undefined);
