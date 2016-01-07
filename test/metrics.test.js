@@ -3,7 +3,7 @@ var resources = require('../lib/resources');
 var assert = require('assert');
 var pkg = require('../package.json');
 
-var debug = require('debug')('mongodb-js-metrics:test:metrics');
+// var debug = require('debug')('mongodb-js-metrics:test:metrics');
 
 var DEBUG = true;
 
@@ -68,7 +68,7 @@ describe('metrics', function() {
 
   describe('send hits to Google Analytics', function() {
     this.slow(1000);
-    this.timeout(5000);
+    this.timeout(15000);
 
     before(function() {
       metrics.configure('ga', {
@@ -83,13 +83,12 @@ describe('metrics', function() {
       metrics.addResource(user);
 
       // send App/launched event
-      metrics.track('App', 'launched', function(err, resp, body) {
-        if (err) {
-          done(err);
-        }
+      metrics.track('App', 'launched', function(err, res) {
+        assert.ifError(err);
+        var resp = res.ga[0][0];
         assert.equal(resp.statusCode, 200);
         if (DEBUG) {
-          debug(body);
+          var body = res.ga[0][1];
           assert.ok(JSON.parse(body).hitParsingResult[0].valid);
         }
         done();
@@ -101,12 +100,12 @@ describe('metrics', function() {
       metrics.addResource(app);
       metrics.addResource(user);
 
-      metrics.track('User', 'login', function(err, resp, body) {
-        if (err) {
-          done(err);
-        }
+      metrics.track('User', 'login', function(err, res) {
+        assert.ifError(err);
+        var resp = res.ga[0][0];
         assert.equal(resp.statusCode, 200);
         if (DEBUG) {
+          var body = res.ga[0][1];
           assert.ok(JSON.parse(body).hitParsingResult[0].valid);
         }
         done();
@@ -119,13 +118,12 @@ describe('metrics', function() {
       metrics.addResource(user);
 
       // send App/launched event
-      metrics.track('App', 'viewed', 'Test Results', function(err, resp, body) {
-        if (err) {
-          done(err);
-        }
+      metrics.track('App', 'viewed', 'Test Results', function(err, res) {
+        assert.ifError(err);
+        var resp = res.ga[0];
         assert.equal(resp.statusCode, 200);
         if (DEBUG) {
-          debug('body', body);
+          var body = res.ga[1];
           assert.ok(JSON.parse(body).hitParsingResult[0].valid);
         }
         done();

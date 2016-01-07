@@ -71,12 +71,13 @@ The current version supports 3 trackers:
 - Google Analytics (screen views, events, exceptions, timings)
 - Intercom (events, in-app communication)
 - Bugsnag (errors)
+- Mixpanel (events)
 
 #### Configuration
 You can configure individual trackers with the `.configure(name, options)` syntax.
 
 ```js
-// configure google analytics
+// configure Google Analytics
 metrics.configure('ga', {
   trackingId: 'UA-########-#'
 });
@@ -89,6 +90,11 @@ metrics.configure('bugsnag', {
 // configure Intercom
 metrics.configure('intercom', {
   appId: '########'
+});
+
+// configure Mixpanel
+metrics.configure('mixpanel', {
+  apiToken: '#####################'
 });
 ```
 

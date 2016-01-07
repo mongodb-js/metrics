@@ -1,8 +1,10 @@
 var metrics = require('../lib')();
 var resources = require('../lib/resources');
 var assert = require('assert');
+var common = require('./common');
 
-var debug = require('debug')('mongodb-js-metrics:test:user');
+// var debug = require('debug')('mongodb-js-metrics:test:user');
+
 var DEBUG = true;
 
 describe('User Resource', function() {
@@ -21,7 +23,7 @@ describe('User Resource', function() {
 
     // create a new user resource
     user = new resources.UserResource({
-      userId: '121d91ad-15a4-47eb-977d-f279492932f0'
+      userId: common.userId
     });
   });
 
@@ -44,11 +46,9 @@ describe('User Resource', function() {
   it('should attach the right protocol parameters for a login event', function(done) {
     // mock function to intercept options
     user._send_ga = function(options) {
-      debug('_send_ga options', options);
       assert.equal(options.hitType, 'event');
-      assert.equal(options.eventLabel, user.userId);
-      assert.equal(options.eventCategory, 'User');
-      assert.equal(options.eventAction, 'login');
+      assert.equal(options.eventCategory, 'User login');
+      assert.equal(options.eventLabel, common.userId);
       done();
     };
     user.login();

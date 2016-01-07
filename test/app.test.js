@@ -3,9 +3,8 @@ var resources = require('../lib/resources');
 var assert = require('assert');
 var pkg = require('../package.json');
 var process = require('process');
-var format = require('util').format;
+var common = require('./common');
 
-// var debug = require('debug')('mongodb-js-metrics:test:user');
 var DEBUG = true;
 
 describe('App Resource', function() {
@@ -52,7 +51,7 @@ describe('App Resource', function() {
     assert.equal(metrics.trackers.get('ga').appPlatform, 'darwin');
   });
 
-  it('should attach the right protocol parameters for a viewed screenview', function(done) {
+  it('should attach the right protocol parameters for a `viewed` screenview', function(done) {
     // mock function to intercept options
     app._send_ga = function(options) {
       assert.equal(options.hitType, 'screenview');
@@ -63,40 +62,72 @@ describe('App Resource', function() {
     app.viewed('MyScreenName');
   });
 
-  it('should attach the right protocol parameters for a launched event', function(done) {
+  it('should attach the right protocol parameters for a `launched` event', function(done) {
     // mock function to intercept options
+    var actions = {};
+    var count = 0;
     app._send_ga = function(options) {
       assert.equal(options.hitType, 'event');
-      assert.equal(options.eventCategory, 'App');
-      assert.equal(options.eventAction, 'launched');
-      assert.equal(options.eventLabel, format('%s %s', pkg.name, pkg.version));
-      done();
+      assert.equal(options.eventCategory, 'App launched');
+      actions[options.eventAction] = typeof options.eventValue !== 'undefined' ?
+        options.eventValue : options.eventLabel;
+      count ++;
+      if (count === 3) {
+        assert.deepEqual(actions, {
+          name: common.appName,
+          version: common.appVersion,
+          platform: common.appPlatform
+        });
+        done();
+      }
     };
     app.launched();
   });
 
-  it('should attach the right protocol parameters for a quit event', function(done) {
+  it('should attach the right protocol parameters for a `quit` event', function(done) {
     // mock function to intercept options
+    var actions = {};
+    var count = 0;
     app._send_ga = function(options) {
       assert.equal(options.hitType, 'event');
-      assert.equal(options.eventCategory, 'App');
-      assert.equal(options.eventAction, 'quit');
-      assert.equal(options.eventLabel, format('%s %s', pkg.name, pkg.version));
-      assert.equal(options.eventValue, 0); // minutes since start
-      done();
+      assert.equal(options.eventCategory, 'App quit');
+      actions[options.eventAction] = typeof options.eventValue !== 'undefined' ?
+        options.eventValue : options.eventLabel;
+      count ++;
+      if (count === 5) {
+        assert.deepEqual(actions, {
+          name: this.appName,
+          version: this.appVersion,
+          platform: this.appPlatform,
+          exitCode: 0,
+          minutesSinceStart: 0
+        });
+        done();
+      }
     };
     app.quit();
   });
 
-  it('should attach the right protocol parameters for an upgraded event', function(done) {
+  it('should attach the right protocol parameters for a `upgraded` event', function(done) {
     // mock function to intercept options
+    var actions = {};
+    var count = 0;
     app._send_ga = function(options) {
       assert.equal(options.hitType, 'event');
-      assert.equal(options.eventCategory, 'App');
-      assert.equal(options.eventAction, 'upgraded');
-      assert.equal(options.eventLabel, format('%s %s -> %s', pkg.name, '0.1.5', pkg.version));
-      done();
+      assert.equal(options.eventCategory, 'App upgraded');
+      actions[options.eventAction] = typeof options.eventValue !== 'undefined' ?
+        options.eventValue : options.eventLabel;
+      count ++;
+      if (count === 4) {
+        assert.deepEqual(actions, {
+          name: this.appName,
+          previousVersion: '0.0.1',
+          version: this.appVersion,
+          platform: this.appPlatform
+        });
+        done();
+      }
     };
-    app.upgraded('0.1.5');
+    app.upgraded('0.0.1');
   });
 });
