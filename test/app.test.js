@@ -99,8 +99,8 @@ describe('App Resource', function() {
           name: this.appName,
           version: this.appVersion,
           platform: this.appPlatform,
-          exitCode: 0,
-          minutesSinceStart: 0
+          'exit code': 0,
+          'minutes since start': 0
         });
         done();
       }
@@ -121,7 +121,7 @@ describe('App Resource', function() {
       if (count === 4) {
         assert.deepEqual(actions, {
           name: this.appName,
-          previousVersion: '0.0.1',
+          'previous version': '0.0.1',
           version: this.appVersion,
           platform: this.appPlatform
         });
