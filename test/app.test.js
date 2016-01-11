@@ -13,8 +13,9 @@ describe('App Resource', function() {
   beforeEach(function() {
     // create metrics object and initialize
     metrics.configure({
-      gaOptions: {
+      ga: {
         debug: DEBUG,
+        enabled: true,
         trackingId: 'UA-71150609-2'
       }
     });
