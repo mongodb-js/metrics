@@ -23,7 +23,7 @@
     "ampersand-collection-lodash-mixin": "^2.0.1",
     "ampersand-state": "4.8.2",
     "async": "^1.5.1",
-    "bugsnag-js": "^2.4.9",
+    "bugsnag-js": "^3.0.7",
     "caller-id": "^0.1.0",
     "debug": "mongodb-js/debug#v2.2.3",
     "lodash": "^4.13.1",
