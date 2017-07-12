@@ -15,6 +15,11 @@ metrics.configure('ga', {
   enabled: true
 });
 
+metrics.configure('stitch', {
+  appId: 'metrics-bffii',
+  enabled: true
+})
+
 // create an app resource with name and version
 var app = new resources.AppResource({
   appName: 'My Cool App',
