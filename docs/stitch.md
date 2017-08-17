@@ -1,6 +1,6 @@
 # Tracking Metrics with Stitch
 
-MongoDB Stitch is a backend as a service. Together with MongoDB's hosted cloud services _MongoDB Atlas_, it is very easy to set up your own metrics server.
+[MongoDB Stitch](https://stitch.mongodb.com/) is a backend as a service. Together with MongoDB's hosted cloud services [MongoDB Atlas](https://cloud.mongodb.com), it is very easy to set up your own metrics server.
 
 ### Overview
 
@@ -8,7 +8,7 @@ Metrics tracking with Stitch deals with two types of resources: users and events
 
 ##### Users
 
-Users are identified through an anonymous, random UUID (stored as `_id`). The first time a user visits your website or starts your application, they are assigned a unique UUID. On subsequent visits or app launches, this UUID is retained (via cookies, local storage, persisted to disk, etc) and re-used throughout. Additional information related to this user can be attached to this UUID, for example the user's email address, or other details.
+Users are identified through a unique identifier, stored as `_id`. Your application needs to ensure that user is assigned a unique key the first time they visit your website or start your application. On subsequent visits or app launches, this UUID needs to be retained (via cookies, local storage, fetched from disk, etc). Additional information related to this user can be attached to this unique identifier, for example the user's email address, or other details.
 
 The users schema is as shown in this example:
 
@@ -79,7 +79,7 @@ Once you're in your Stitch console, click on `mongodb-atlas` under _Atlas Cluste
       "%%true": true
     }
     ```
-    This rule ensures that the `_id` field can be read and written to (so that updates succeed). Leave the Valid box empty.
+    This rule ensures that the `_id` field can be read (so that updates succeed) and written to (on first creation of the document). Leave the Valid box empty.
 3. Click on _all other fields_, and enable the switch. Configure the Read and Write rules for _all other fields_ as below:
 
     **Read**
@@ -131,7 +131,7 @@ The stitch tracker can be configured via `metrics.configure()`. Here is an examp
 ```js
 // configure Stitch
 metrics.configure('stitch', {
-  appId: 'my-cool-app-vlgrx',
+  appId: 'my-app-metrics-vlgxs',
   users: 'metrics-db.users-coll',     // optional, default is metrics.users
   events: 'metrics-db.events-coll',   // optional, default is metrics.events
   enabled: true
