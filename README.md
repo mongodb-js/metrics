@@ -98,53 +98,53 @@ Once you're in your Stitch console, click on `mongodb-atlas` under _Atlas Cluste
 1. Click on your _users_ collection, and go to _Field Rules_. Select _Top-Level Document_. Ensure that all 3 boxes - Read, Write and Valid - are completely empty.
 2. Add a new field (_+ Add_ button) called `_id`. Configure the Read rule as below:
 
-  Read
-  ```json
-  {
-     "%%true": true
-  }
-  ```
-  This rule ensures that the `_id` field can be read (so that updates succeed). Leave the Write and Valid boxes empty.
+    **Read**
+    ```json
+    {
+      "%%true": true
+    }
+    ```
+    This rule ensures that the `_id` field can be read (so that updates succeed). Leave the Write and Valid boxes empty.
 3. Click on _all other fields_, and enable the switch. Configure the Read and Write rules for _all other fields_ as below:
 
-  Read
-  ```json
-  {
-     "%%true": false
-  }
-  ```
-  Write
-  ```json
-  {
-     "%%true": true
-  }
-  ```
-  These rules ensure that all other fields can never be read through the Stitch API, but can be written to.
+    **Read**
+    ```json
+    {
+      "%%true": false
+    }
+    ```
+    **Write**
+    ```json
+    {
+      "%%true": true
+    }
+    ```
+    These rules ensure that all other fields can never be read through the Stitch API, but can be written to.
 
 
 *Events Collection*
 
 1. Click on your _events_ collection, and go to _Field Rules_. Select _Top-Level Document_. Configure the Read rule as below:
 
-  Read
-  ```json
-  {
-     "%%true": false
-  }
-  ```
-  This ensures that no document of this collection can be read through the Stitch API. This collection is write-only. Leave the Write and Valid boxes empty.
+    **Read**
+    ```json
+    {
+      "%%true": false
+    }
+    ```
+    This ensures that no document of this collection can be read through the Stitch API. This collection is write-only. Leave the Write and Valid boxes empty.
 
 2. Click on _all other fields_, and enable the switch. Configure the Write rule for _all other fields_ as below:
 
-  Write
-  ```json
-  {
-     "%%prev": {
-       "%exists": false
-     }
-  }
-  ```
-  This ensures that all other fields can only be created, but never updated. We don't allow changes to tracked events through the Stitch API.
+    **Write**
+    ```json
+    {
+      "%%prev": {
+        "%exists": false
+      }
+    }
+    ```
+    This ensures that all other fields can only be created, but never updated. We don't allow changes to tracked events through the Stitch API.
 
 Your Stitch Application is now configured and ready for tracking metrics. All you need is the App ID (Click on _Clients_ in the sidebar to see it), and the namespaces of the users and events collections, if you chose non-default names.
 
