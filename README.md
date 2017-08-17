@@ -1,8 +1,8 @@
 # mongodb-js-metrics [![travis][travis_img]][travis_url] [![npm][npm_img]][npm_url]
-mongodb-js-metrics is a reusable metrics wrapper for a number of external tracking services. Currently, it supports [Google Analytics][ga], [Intercom][intercom], and [Bugsnag][bugsnag].
+mongodb-js-metrics is a reusable metrics wrapper for a number of external tracking services. Currently, it supports [Google Analytics][ga], [Intercom][intercom], [Bugsnag][bugsnag], and MongoDB Stitch/Atlas.
 
 ## Quick Start
-Here is an example how to set up Google Analytics tracking of application launches, screen views and user logins within your app.
+Here is an example how to set up Google Analytics and Stitch tracking of application launches, screen views and user logins within your app.
 
 ```js
 // require the built-in resources and the metrics object itself
@@ -75,15 +75,80 @@ The `metrics` object holds references to trackers and resources, and makes the t
 ### Trackers
 The current version supports 4 trackers:
 
-##### Google Analytics
+#### Google Analytics
 
 Used to send _screen views_, _events_, _errors_, _timings_. Tracker name is `ga`. Requires **App** and **User** resources.
 
-##### Intercom
+#### Intercom
 
 Used to send _events_ and also provides _in-app communication_. Tracker name is `intercom`. Requires **App** and **User** resources.
 
-##### Bugsnag
+#### MongoDB Stitch/Atlas
+
+Used to track _users_ and _events_. You need to set up your own Atlas instance and connect a Stitch app, see configuration details below. Tracker name is `stitch`. Requires **App** and **User** resources.
+
+##### Stitch configuration
+
+In order to use the Stitch tracker, you need to create a [MongoDB Atlas](https://cloud.mongodb.com) account, set up a cluster (Free Tier available), connect a Stitch application and configure it.
+
+Once you're in your Stitch console, click on `mongodb-atlas` under _Atlas Clusters_. Under _Rules_, create 2 new collections, one for users and one for events tracking. The default namespaces are `metrics.users` and `metrics.events`, but you can use custom database and collection names as well.
+
+*Users Collection*
+
+1. Click on your _users_ collection, and go to _Field Rules_. Select _Top-Level Document_. Ensure that all 3 boxes - Read, Write and Valid - are completely empty.
+2. Add a new field (_+ Add_ button) called `_id`. Configure the Read rule as below:
+
+  Read
+  ```json
+  {
+     "%%true": true
+  }
+  ```
+  This rule ensures that the `_id` field can be read (so that updates succeed). Leave the Write and Valid boxes empty.
+3. Click on _all other fields_, and enable the switch. Configure the Read and Write rules for _all other fields_ as below:
+
+  Read
+  ```json
+  {
+     "%%true": false
+  }
+  ```
+  Write
+  ```json
+  {
+     "%%true": true
+  }
+  ```
+  These rules ensure that all other fields can never be read through the Stitch API, but can be written to.
+
+
+*Events Collection*
+
+1. Click on your _events_ collection, and go to _Field Rules_. Select _Top-Level Document_. Configure the Read rule as below:
+
+  Read
+  ```json
+  {
+     "%%true": false
+  }
+  ```
+  This ensures that no document of this collection can be read through the Stitch API. This collection is write-only. Leave the Write and Valid boxes empty.
+
+2. Click on _all other fields_, and enable the switch. Configure the Write rule for _all other fields_ as below:
+
+  Write
+  ```json
+  {
+     "%%prev": {
+       "%exists": false
+     }
+  }
+  ```
+  This ensures that all other fields can only be created, but never updated. We don't allow changes to tracked events through the Stitch API.
+
+Your Stitch Application is now configured and ready for tracking metrics. All you need is the App ID (Click on _Clients_ in the sidebar to see it), and the namespaces of the users and events collections, if you chose non-default names.
+
+#### Bugsnag
 
 Used to send _errors_. Tracker name is `bugsnag`. Requires **App** resource.
 
@@ -108,6 +173,14 @@ metrics.configure('bugsnag', {
 // configure Intercom
 metrics.configure('intercom', {
   appId: '########',
+  enabled: true
+});
+
+// configure Stitch
+metrics.configure('stitch', {
+  appId: '########',
+  users: 'metrics-db.users-coll',     // optional, default is metrics.users
+  events: 'metrics-db.events-coll',   // optional, default is metrics.events
   enabled: true
 });
 ```
