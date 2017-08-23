@@ -3,7 +3,7 @@ var metrics = require('../')();
 
 metrics.configure({
   stitch: {
-    appId: 'metrics-bffii',
+    appId: 'compass-metrics-irinb',
     enabled: true
   }
 });
@@ -17,7 +17,8 @@ var app = new resources.AppResource({
 
 // create a user resource with client id (UUID v4 recommended)
 var user = new resources.UserResource({
-  userId: '3c007a83-e8c3-4b52-9631-b5fd97950dce'
+  userId: '3c007a83-e8c3-4b52-9631-b5fd97950dce',
+  name: 'Thomas'
 });
 
 // add the resources to the metrics module to set everything up
