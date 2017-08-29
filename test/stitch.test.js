@@ -1,8 +1,6 @@
 var metrics = require('../lib')();
 var resources = require('../lib/resources');
 var assert = require('assert');
-// var format = require('util').format;
-var _ = require('lodash');
 var common = require('./common');
 
 // var debug = require('debug')('mongodb-js-metrics:test:stitch');
@@ -16,7 +14,7 @@ describe('Stitch Tracker', function() {
     // create metrics object and initialize
     metrics.configure('stitch', {
       enabled: true,
-      stitchAppId: 'compass-metrics-irinb',
+      appId: 'compass-metrics-irinb',
       eventNamespace: 'metrics.events',
       userNamespace: 'metrics.users'
     });
@@ -37,15 +35,29 @@ describe('Stitch Tracker', function() {
     stitchTracker = metrics.trackers.get('stitch');
   });
 
-  it('should only initialize after setting app and user resources', function() {
-    assert.equal(stitchTracker.stitchClient, null);
+  afterEach(function() {
+    stitchTracker.clear();
+  });
+
+  it('correctly sets enabledAndConfigured when props change', function() {
+    stitchTracker.enabled = false;
+    assert.ok(!stitchTracker.enabledAndConfigured);
+    stitchTracker.enabled = true;
+    assert.ok(stitchTracker.enabledAndConfigured);
+  });
+
+  it('should only initialize after setting app and user resources', function(done) {
+    assert.equal(metrics.resources.length, 0);
+    assert.equal(stitchTracker.enabledAndConfigured, false);
     metrics.addResource(app);
-    assert.equal(stitchTracker.stitchClient, null);
     metrics.addResource(user);
     // after call stack clears, stitchClient should not be null anymore
-    _.defer(function() {
-      assert.ok(stitchTracker.stitchClient);
-      assert.ok(stitchTracker.collection);
+    setTimeout(function() {
+      assert.ok(stitchTracker.appId);
+      assert.ok(stitchTracker.userId);
+      assert.ok(stitchTracker.enabledAndConfigured);
+      assert.ok(stitchTracker._client);
+      done();
     });
   });
 });
