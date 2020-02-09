@@ -38,7 +38,7 @@ describe('Stitch Tracker', function() {
 
   afterEach(function(done) {
     stitchTracker.clear();
-    stitchTracker._teardown();
+    stitchTracker.close();
     done();
   });
 
