@@ -36,16 +36,18 @@ describe('Stitch Tracker', function() {
     stitchTracker = metrics.trackers.get('stitch');
   });
 
-  afterEach(function() {
+  afterEach(function(done) {
     stitchTracker.clear();
     stitchTracker._teardown();
+    done();
   });
 
-  it('correctly sets enabledAndConfigured when props change', function() {
+  it('correctly sets enabledAndConfigured when props change', function(done) {
     stitchTracker.enabled = false;
     assert.ok(!stitchTracker.enabledAndConfigured);
     stitchTracker.enabled = true;
     assert.ok(stitchTracker.enabledAndConfigured);
+    done();
   });
 
   it('should only initialize after setting app and user resources', function(done) {
