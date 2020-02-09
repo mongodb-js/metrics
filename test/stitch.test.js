@@ -38,6 +38,7 @@ describe('Stitch Tracker', function() {
 
   afterEach(function() {
     stitchTracker.clear();
+    stitchTracker._teardown();
   });
 
   it('correctly sets enabledAndConfigured when props change', function() {
@@ -157,9 +158,5 @@ describe('Stitch Tracker', function() {
         assert.ok(!_getCollectionStub.called);
       });
     });
-  });
-
-  after(function() {
-    stitchTracker._client.close();
   });
 });
