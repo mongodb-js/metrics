@@ -5,8 +5,7 @@
   "scripts": {
     "check": "mongodb-js-precommit",
     "test": "mocha",
-    "test:electron": "xvfb-maybe electron-mocha --renderer",
-    "ci": "npm run check && npm test && npm run test:electron"
+    "test:electron": "xvfb-maybe electron-mocha --renderer"
   },
   "homepage": "http://github.com/mongodb-js/metrics",
   "repository": {
