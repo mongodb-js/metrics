@@ -43,7 +43,7 @@ describe('App Resource', function() {
   });
 
   it('should have os platform and os.release in osName', function() {
-    assert.ok(app.osName);
+    assert.ok(app.osName.trim());
     assert.deepStrictEqual(app.osName, `${os.platform()} ${os.release()}`);
   });
 
